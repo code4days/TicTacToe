@@ -2,3 +2,7 @@ GameGrid{
     layout: grid;
     grid-size: 3 3;
 }
+
+GameCell.x{
+    background: $secondary;
+}

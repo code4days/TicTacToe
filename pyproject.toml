@@ -2,7 +2,7 @@
 name = "tic-tac-toe"
 version = "0.1.0"
 description = ""
-authors = ["Rasheed E <relsaleh@gmail.com>"]
+authors = ["Rasheed"]
 readme = "README.md"
 packages = [{include = "tic_tac_toe"}]
 
@@ -12,6 +12,8 @@ python = "^3.10"
 
 [tool.poetry.group.dev.dependencies]
 textual = {extras = ["dev"], version = "^0.28.1"}
+mypy = "^1.4.0"
+pytest = "^7.4.0"
 
 [build-system]
 requires = ["poetry-core"]
