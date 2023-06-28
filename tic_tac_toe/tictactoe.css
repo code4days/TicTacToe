@@ -6,3 +6,7 @@ GameGrid{
 GameCell.x{
     background: $secondary;
 }
+
+.visible {
+    visibility: visible;
+}
