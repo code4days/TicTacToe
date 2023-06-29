@@ -10,6 +10,9 @@ from tic_tac_toe.tic_tac_toe_game import TicTacToeGame
 """
 This is a simple Tic Tac Toe game with a Textual interface.
 It is a work in progress.
+
+TODO:
+- add the ability to restart the game
 """
 
 
@@ -39,6 +42,7 @@ class TicTacToeApp(App):
 
     CSS_PATH = "tictactoe.css"
     BINDINGS = [("d", "toggle_dark", "Toggle dark mode")]
+    TITLE = "Play Tic Tac Toe"
 
     SIZE: Final = 3
 
@@ -51,7 +55,7 @@ class TicTacToeApp(App):
 
         yield Header()
         yield Footer()
-        yield Label("Play Tic Tac Toe")
+        # yield Label("Play Tic Tac Toe")
         yield GameGrid()
         yield Label(id="winner-label")
 
@@ -65,13 +69,23 @@ class TicTacToeApp(App):
         button.disabled = True
         button.classes = player
 
+    def _update_winner_label(self, msg: str) -> None:
+        """Update winner label with message"""
+
+        winner_label = self.query_one("#winner-label", Label)
+        winner_label.update(msg)
+        winner_label.visible = True
+
+    def _game_playable(self, playable: bool) -> None:
+        """Update game playability"""
+
+        self.query_one(GameGrid).disabled = not playable
+
     @on(Button.Pressed)
     def handle_button_pressed(self, message: Button.Pressed):
         """Handle a button pressed event"""
-        print(message.button)
+
         row, col = message.button.row, message.button.col
-        print(f"Row: {row}, Col: {col}")
-        print(f"Button {message.button.id} pressed")
 
         if self.game.is_valid_move(row, col):
             self._update_button(message.button, self.game.player)
@@ -79,17 +93,14 @@ class TicTacToeApp(App):
 
             if self.game.has_winner(player=self.game.player, row=row, col=col):
                 msg = f"Player {self.game.player} wins!"
-                winner_label = self.query_one("#winner-label", Label)
-                winner_label.add_class("visible")
-                winner_label.update(msg)
+                self._game_playable(False)
+                self._update_winner_label(msg)
                 return
 
             if self.game.is_board_full():
                 msg = "Game Tied"
-
-                winner_label = self.query_one("#winner-label", Label)
-                winner_label.update(msg)
-                winner_label.add_class("visible")
+                self._game_playable(False)
+                self._update_winner_label(msg)
                 return
         self.game.switch_players()
 
