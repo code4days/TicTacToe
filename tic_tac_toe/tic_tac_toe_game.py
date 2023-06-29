@@ -11,9 +11,6 @@ get move, check if valid, check if move wins, repeat until winner or board full
 
 """
 
-
-# create game logic class
-
 BOARD_SIZE = 3
 FIRST_PLAYER = "X"
 
@@ -41,9 +38,7 @@ class TicTacToeGame:
     def is_board_full(self) -> bool:
         """Check if board is full"""
 
-        if self.move_count == BOARD_SIZE * BOARD_SIZE:
-            return True
-        return False
+        return self.move_count == BOARD_SIZE * BOARD_SIZE
 
     def check_row(self, player: str, row: int) -> bool:
         """Check for winner in row"""
