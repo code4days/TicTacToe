@@ -9,6 +9,8 @@ from tic_tac_toe.tic_tac_toe_game import TicTacToeGame
 
 """
 This is a simple Tic Tac Toe game with a Textual interface.
+
+TODO: figure out why hover color persists after game reset.
 """
 
 

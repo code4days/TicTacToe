@@ -19,6 +19,10 @@ GameCell {
     transition: background $animation-speed $animation-type, color $animation-speed $animation-type;
 }
 
+GameCell:hover {
+    background: $panel-lighten-1;
+}
+
 GameCell.X {
     background: $primary;
     color: $text;
