@@ -15,7 +15,7 @@ GameGrid {
 GameCell {
     width: 100%;
     height: 100%;
-    border: round $surface-darken-1;
+    /* border: round $surface-darken-1; */
     transition: background $animation-speed $animation-type, color $animation-speed $animation-type;
 }
 
@@ -29,7 +29,7 @@ GameCell.O {
     color: $text;
 }
 
-#winner-label {
+WinnerMessage {
     width: 50%;
     height: 25%;
     layer: messages;

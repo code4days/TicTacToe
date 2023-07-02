@@ -9,10 +9,6 @@ from tic_tac_toe.tic_tac_toe_game import TicTacToeGame
 
 """
 This is a simple Tic Tac Toe game with a Textual interface.
-It is a work in progress.
-
-TODO:
-- add the ability to restart the game
 """
 
 
@@ -37,11 +33,20 @@ class GameGrid(Widget):
                 yield GameCell(row, col)
 
 
+class WinnerMessage(Label):
+    def show(self, msg: str) -> None:
+        self.update(msg)
+        self.add_class("visible")
+
+    def hide(self) -> None:
+        self.remove_class("visible")
+
+
 class TicTacToeApp(App):
     """Tic Tac Toe game with Textual interface"""
 
     CSS_PATH = "tictactoe.css"
-    BINDINGS = [("d", "toggle_dark", "Toggle dark mode")]
+    BINDINGS = [("d", "toggle_dark", "Toggle dark mode"), ("n", "new_game", "New game")]
     TITLE = "Play Tic Tac Toe"
 
     SIZE: Final = 3
@@ -55,12 +60,30 @@ class TicTacToeApp(App):
 
         yield Header()
         yield Footer()
-        # yield Label("Play Tic Tac Toe")
         yield GameGrid()
-        yield Label(id="winner-label")
+        yield WinnerMessage()
+
+    def action_new_game(self) -> None:
+        """Start a new game"""
+
+        self.game = TicTacToeGame()
+        self.reset_all_buttons()
+        self.query_one(WinnerMessage).hide()
+        self._game_playable(True)
 
     def action_toggle_dark(self) -> None:
         self.dark = not self.dark
+
+    def _get_cell(self, row: int, col: int) -> GameCell:
+        return self.query_one(f"#{GameCell.at(row, col)}", GameCell)
+
+    def reset_all_buttons(self) -> None:
+        for row in range(self.SIZE):
+            for col in range(self.SIZE):
+                button = self._get_cell(row, col)
+                button.label = ""
+                button.disabled = False
+                button.classes = []
 
     def _update_button(self, button: GameCell, player: str):
         """Update button with player's symbol"""
@@ -68,13 +91,6 @@ class TicTacToeApp(App):
         button.label = player
         button.disabled = True
         button.classes = player
-
-    def _update_winner_label(self, msg: str) -> None:
-        """Update winner label with message"""
-
-        winner_label = self.query_one("#winner-label", Label)
-        winner_label.update(msg)
-        winner_label.visible = True
 
     def _game_playable(self, playable: bool) -> None:
         """Update game playability"""
@@ -94,13 +110,13 @@ class TicTacToeApp(App):
             if self.game.has_winner(player=self.game.player, row=row, col=col):
                 msg = f"Player {self.game.player} wins!"
                 self._game_playable(False)
-                self._update_winner_label(msg)
+                self.query_one(WinnerMessage).show(msg)
                 return
 
             if self.game.is_board_full():
                 msg = "Game Tied"
                 self._game_playable(False)
-                self._update_winner_label(msg)
+                self.query_one(WinnerMessage).show(msg)
                 return
         self.game.switch_players()
 

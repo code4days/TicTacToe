@@ -1,14 +1,5 @@
 """
-Create a playable Tic Tac Toe game
-
-two players, x and o
-x goes first
-x and o take turns
-
-winner is first player to get three in a row, a column, diagonal, or anti-diagonal
-
-get move, check if valid, check if move wins, repeat until winner or board full
-
+Tick Tac Toe game logic for use with Textual.
 """
 
 BOARD_SIZE = 3
@@ -18,7 +9,6 @@ FIRST_PLAYER = "X"
 class TicTacToeGame:
     def __init__(self):
         self.player = FIRST_PLAYER
-        self.winner = ""
         self.move_count = 0
         self.board = self.create_board()
 
